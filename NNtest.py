@@ -15,7 +15,7 @@ import logging
 import paramiko
 import os
 from dotenv import load_dotenv
-from typing import Optional, Dict, List  # 👈 ДОБАВЬ List
+from typing import Optional, Dict, List
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 # Загружаем переменные из .env
@@ -33,10 +33,8 @@ logger = logging.getLogger(__name__)
 # ========== КОНФИГУРАЦИЯ ==========
 
 # Настройки бота
-#TOKEN1 = "8568142802:AAF13RQat2mWOktbZCBc4KjhzUHqF96LXrE" #MESA VPN
 TOKEN1 = os.getenv("TOKEN1")
 TOKEN2 = os.getenv("TOKEN2")
-ADMIN_IDS = [5121135766]
 my_id = os.getenv("my_id")
 # ========== НАСТРОЙКИ КАНАЛА ==========
 CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
@@ -62,17 +60,17 @@ PASSWORD1 = os.getenv("XUI_PASSWORD")
 REALITY_PUBLIC_KEY = os.getenv("REALITY_PUBLIC_KEY")
 SERVER_IP2 = os.getenv("SERVER_IP2")
 SERVER_DOMEN2 = os.getenv("SERVER_DOMEN2")
-DEFAULT_PORT2 = int(os.getenv("DEFAULT_PORT2", "8443"))
+DEFAULT_PORT2 = int(os.getenv("DEFAULT_PORT2"))
 DEFAULT_SNI = os.getenv("DEFAULT_SNI")
 COUNTRY_PHOTO = os.getenv("COUNTRY_PHOTO")
 SERVER_IP = os.getenv("SERVER_IP")
 SERVER_DOMEN = os.getenv("SERVER_DOMEN")
-DEFAULT_PORT = int(os.getenv("DEFAULT_PORT", "443"))
+DEFAULT_PORT = int(os.getenv("DEFAULT_PORT"))
 
 # ========== НАСТРОЙКИ SSH ==========
 SERVER = {
     "hostname": os.getenv("SSH_HOST"),
-    "port": int(os.getenv("SSH_PORT", "22")),
+    "port": int(os.getenv("SSH_PORT")),
     "username": os.getenv("SSH_USERNAME"),
     "password": os.getenv("SSH_PASSWORD")
 }
@@ -215,7 +213,7 @@ class SubscriptionManager:
             el = cursor.fetchone()  # ВАЖНО: может быть None!
 
             # ОТЛАДКА: посмотрим что вернулось
-            print(f"DEBUG: el = {el}")  # Покажет (None, '5121135766', 'a255b039-8e6a-4b88-907b-97a7dfc9ac8f')
+            print(f"DEBUG: el = {el}")  # Покажет (None, 'my_id', 'a255b039-8e6a-4b88-907b-97a7dfc9ac8f')
             print(f"DEBUG: type(el) = {type(el)}")  # Покажет <class 'tuple'> или <class 'NoneType'>
             print(f"DEBUG: el is None = {el is None}")  # False если данные есть
 
@@ -257,7 +255,7 @@ class SubscriptionManager:
     #         el = cursor.fetchone()  # ВАЖНО: может быть None!
     #
     #         # ОТЛАДКА: посмотрим что вернулось
-    #         print(f"DEBUG: el = {el}")  # Покажет (None, '5121135766', 'a255b039-8e6a-4b88-907b-97a7dfc9ac8f')
+    #         print(f"DEBUG: el = {el}")  # Покажет (None, 'my_id', 'a255b039-8e6a-4b88-907b-97a7dfc9ac8f')
     #         print(f"DEBUG: type(el) = {type(el)}")  # Покажет <class 'tuple'> или <class 'NoneType'>
     #         print(f"DEBUG: el is None = {el is None}")  # False если данные есть
     #
@@ -1422,8 +1420,8 @@ class VPNManager:
     #         if not inbounds.get('obj'):
     #             return False
     #         inbound_id = 2
-    #         # vless://bd0424fe-ebca-45b6-8ade-a0a5ceaf2ff2@144.31.247.61:443?type=tcp&encryption=none&security=reality&pbk=PIvLjG-jBC1C1WNU-qSpCgZwDuNqrN8_9xU7nhotaS0&fp=chrome&sni=www.nvidia.com&sid=f64fd5fb036fed&spx=%2F&flow=xtls-rprx-vision#PRO_5121135766-7351725
-    #         # vless://9d6da848-561f-4867-9d98-4c8467c0cf10@144.31.247.61:433?type=tcp&encryption=none&security=reality&pbk=PIvLjG-jBC1C1WNU-qSpCgZwDuNqrN8_9xU7nhotaS0&fp=chrome&sni=www.nvidia.com&sid=f64fd5fb036fed&spx=%2F&flow=xtls-rprx-vision#PRO_5121135766-8384977
+    #         # vless://bd0424fe-ebca-45b6-8ade-a0a5ceaf2ff2@144.31.247.61:443?type=tcp&encryption=none&security=reality&pbk=PIvLjG-jBC1C1WNU-qSpCgZwDuNqrN8_9xU7nhotaS0&fp=chrome&sni=www.nvidia.com&sid=f64fd5fb036fed&spx=%2F&flow=xtls-rprx-vision#PRO-7351725
+    #         # vless://9d6da848-561f-4867-9d98-4c8467c0cf10@144.31.247.61:433?type=tcp&encryption=none&security=reality&pbk=PIvLjG-jBC1C1WNU-qSpCgZwDuNqrN8_9xU7nhotaS0&fp=chrome&sni=www.nvidia.com&sid=f64fd5fb036fed&spx=%2F&flow=xtls-rprx-vision#PRO-8384977
     #         # Рассчитываем время окончания
     #         current_time = int(time.time())
     #         if expiry_days > 0:
@@ -3134,7 +3132,7 @@ def otziv(message):
                                           f"Поддержка - @MESA_VPN_support")
 
         _otziv_ = message.text.replace("/otziv ", "")
-        bot.send_message(chat_id=5121135766,
+        bot.send_message(chat_id=my_id,
                          text=  f"Новый отзыв!\n"
                                 f"<blockquote>{str(_otziv_)}</blockquote>"
                                 f"Чтобы ответить - <code>/admin_send {user_id}</code>",
@@ -5105,7 +5103,7 @@ def fail(call):
     _, user_id = call.data.split(":")
     user_id = int(user_id)
     bot.delete_message(call.message.chat.id, call.message.id)
-    bot.send_message(chat_id=5121135766,
+    bot.send_message(chat_id=my_id,
                      text="Успешно!\nСсылка не будет отправлена"
                      )
     mark = types.InlineKeyboardMarkup()
@@ -5129,7 +5127,7 @@ def failPRO(call):
     bot.delete_message(call.message.chat.id, call.message.id)
     mark = types.InlineKeyboardMarkup()
     mark.add(types.InlineKeyboardButton(text="🔁 Повторить попытку", callback_data="continue_sub"))
-    bot.send_message(chat_id=5121135766,
+    bot.send_message(chat_id=my_id,
                      text="Успешно!\nСсылка не будет отправлена"
                      )
     conn = sqlite3.connect('itproger2.sql')
@@ -6026,7 +6024,7 @@ def add_admin(message):
     args = message.text.split()
 
     if len(args) < 2:
-        bot.send_message(message.chat.id, "❌ Укажите ID пользователя после команды:\n/admin_add 5121135766")
+        bot.send_message(message.chat.id, f"❌ Укажите ID пользователя после команды:\n/admin_add {my_id}")
         return
 
     target_user_id = args[1]
